@@ -15,10 +15,14 @@ async function start() {
    to guess it within the range of 1 and ${process.argv[2] ||100}`)
   let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
   console.log('You entered: ' + secretNumber);
+  if(secretNumber>process.argv[2]){
+    console.log('************INVALID NUMBER******************');
+    start();
+  }
   // Now try and complete the program.
-  let min=0;
+  let min=1;
   let max= process.argv[2] ||100;
-  guess=(Math.random()*(max)+min+1)
+  guess=(Math.random()*(max-min)+min)//random number in range
 
   isItNum(min, max, guess);
   
@@ -28,15 +32,15 @@ async function start() {
 async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM FIRST GUESS
   guess=Math.random()*(( (max-min)/2 ))+min;
 
-  let ans1 = await ask(`Is it...${Math.ceil(guess)}? (Y) or (N)`);
+  let ans1 = await ask(`Is it...${Math.floor(guess)}? (Y) or (N)`);
   if(ans1==='N'){
     
   isHighLow(min, max, guess)
     //isItNum(min,max)
 
-} else if (ans1==='Y'){return console.log(`Your number is ${Math.ceil(guess)}!`)
-process.exit();
- } else if (ans!=='Y'||ans!=='N') isItNUM(min,max,guess);
+} else if (ans1==='Y'){return console.log(`Your number is ${Math.floor(guess)}!`)
+ } else if (ans!=='Y'||ans!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
+ isItNUM(min,max,guess)};
 }
 
 
