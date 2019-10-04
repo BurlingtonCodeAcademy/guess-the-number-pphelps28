@@ -16,9 +16,9 @@ async function start() {
   let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
   console.log('You entered: ' + secretNumber);
   // Now try and complete the program.
-  let min=1;
+  let min=0;
   let max= process.argv[2] ||100;
-  guess=(Math.random()*(max)+1)
+  guess=(Math.random()*(max)+min+1)
 
   isItNum(min, max, guess);
   
@@ -28,7 +28,7 @@ async function start() {
 async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM FIRST GUESS
   guess=Math.random()*(( (max-min)/2 ))+min;
 
-  let ans1 = await ask(`Is it...${Math.floor(guess)}? (Y) or (N)`);
+  let ans1 = await ask(`Is it...${Math.ceil(guess)}? (Y) or (N)`);
   if(ans1==='N'){
     
   isHighLow(min, max, guess)
@@ -49,9 +49,9 @@ async function isHighLow(min,max,guess){
   /** all variable arguments 
   are re-defined within 
   their own function scope *///call isItNum in isHighLow, NOT VICE VERSA
-    if(ans==='H'&& guess<secretNumber){
+    if(ans==='H'){
       min=guess; 
-    } else if(ans==='L'&& guess>secretNumber){
+    } else if(ans==='L'){
       max=guess;
    }  else if (ans!=='H'||ans!=='L') isHighLow(min,max,guess);
    return isItNum(min,max,guess);
