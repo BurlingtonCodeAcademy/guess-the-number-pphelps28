@@ -30,8 +30,8 @@ async function start() {
 ; 
 
 async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM FIRST GUESS
-  guess=Math.random()*(( (max-min)/2 ))+min;
-
+ 
+  
   let ans1 = await ask(`Is it...${Math.floor(guess)}? (Y) or (N)`);
   if(ans1==='N'){
     
@@ -40,7 +40,9 @@ async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM F
 
 } else if (ans1==='Y'){return console.log(`Your number is ${Math.floor(guess)}!`)
  } else if (ans!=='Y'||ans!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
+ 
  isItNUM(min,max,guess)};
+
 }
 
 
@@ -50,17 +52,20 @@ async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM F
 async function isHighLow(min,max,guess){
 
   let ans= await ask(`Is it higher (H), or lower (L)?`); 
-  /** all variable arguments 
-  are re-defined within 
-  their own function scope *///call isItNum in isHighLow, NOT VICE VERSA
-    if(ans==='H'){
+      if(ans==='H'&& max>min){
       min=guess; 
-    } else if(ans==='L'){
-      max=guess;
-   }  else if (ans!=='H'||ans!=='L') isHighLow(min,max,guess);
+
+    } else if(ans==='L'&& max>min){
+      max=guess;}
+
+    else if(max<min){ console.log((`HOLD ON, YOU SAID ${guess} 
+    WAS LESS THAN ${max} AND GREATER THAN ${min}`)); isHighLow(min,max,guess)
+
+   }  else if (ans!=='H'||ans!=='L' || ans==undefined) isHighLow(min,max,guess);
+   guess=(( (max-min)/2 ))+min;
+   
    return isItNum(min,max,guess);
   } 
-  /* define the guess as a variable INSTEAD OF computing a new guess on the */
 
 
    
