@@ -10,15 +10,18 @@ function ask(questionText) {
 start();
 
 async function start() {
+  async function compguess(){
     let min=1;
     let max= process.argv[2] || 100
   console.log(  `Let's play a game where I make up a number 
   and you try to guess it within the range of ${min} and ${max}.`)
+  
   const secretNumber= Math.round(Math.random()*(max-min)+min);
   
   console.log(secretNumber); //so I know//
   guessFunc(max, secretNumber);
  
+  }
 }
 
 
@@ -26,8 +29,6 @@ async function guessFunc(max, secretNumber){
 
   let userGuess= await ask("What's your guess?");
   let lockSecret=secretNumber;
-  console.log(lockSecret);
-  console.log((Number.isInteger(userGuess)===false ))
   console.log(userGuess)
   
      if(userGuess==lockSecret){

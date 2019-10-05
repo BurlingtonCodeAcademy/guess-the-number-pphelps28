@@ -7,9 +7,13 @@ function ask(questionText) {
   });
 }
 
-start();
 
 async function start() {
+  guess();
+}
+start();
+
+async function guess(){
   console.log(
   `Let's play a game where you (human) make up a number and I (computer) try
    to guess it within the range of 1 and ${process.argv[2] ||100}`)
@@ -25,54 +29,78 @@ async function start() {
   guess=(Math.random()*(max-min)+min)//random number in range
 
   isItNum(min, max, guess);
+  }
   
-}
-; 
+  async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM FIRST GUESS
+   
+    let ans1 = await ask(`Is it...${Math.floor(guess)}? (Y) or (N)`);
+    if(ans1==='N'){
+      
+    isHighLow(min, max, guess)
+      //isItNum(min,max)
+  
+  } else if (ans1==='Y'){ console.log(`Your number is ${Math.floor(guess)}!`);
+  compguess();
+  } else if (ans!=='Y'||ans!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
+  
+   isItNUM(min,max,guess)};
+  }
+  
+  async function isHighLow(min,max,guess){
+  
+    let ans= await ask(`Is it higher (H), or lower (L)?`); 
+        if(ans==='H'&& max>min){
+        min=guess; 
+  
+      } else if(ans==='L'&& max>min){
+        max=guess;}
+  
+      else if(max<min){ console.log((`HOLD ON, YOU SAID ${guess} 
+      WAS LESS THAN ${max} AND GREATER THAN ${min}`)); isHighLow(min,max,guess)
+  
+     }  else if (ans!=='H'||ans!=='L' || ans==undefined) isHighLow(min,max,guess);
+     guess=(( (max-min)/2 ))+min;
+     
+     return isItNum(min,max,guess);
+    } 
 
-async function isItNum(min,max,guess){   //TRY TO SET RANGE RELATIVE TO RANDOM FIRST GUESS
- 
+async function compguess(){
+    let min=1;
+    let max= process.argv[2] || 100
+  console.log(  `Now, let's play a game where I make up a number 
+  and you try to guess it within the range of ${min} and ${max}.`)
   
-  let ans1 = await ask(`Is it...${Math.floor(guess)}? (Y) or (N)`);
-  if(ans1==='N'){
+  const secretNumber= Math.round(Math.random()*(max-min)+min);
+  
+  console.log(secretNumber); //so I know//
+  guessFunc(max, secretNumber);
+ 
+}
+
+
+  async function guessFunc(max, secretNumber){
+  
+    let userGuess= await ask("What's your guess?");
+    let lockSecret=secretNumber;
+    console.log(userGuess)
     
-  isHighLow(min, max, guess)
-    //isItNum(min,max)
-
-} else if (ans1==='Y'){return console.log(`Your number is ${Math.floor(guess)}!`)
- } else if (ans!=='Y'||ans!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
- 
- isItNUM(min,max,guess)};
-
-}
-
-
-//Cheat detector: if a response contradicts an earlier response, complain and ask again. e.g. But you said it was lower than 25, so it can't also be higher than 24!
-
-
-async function isHighLow(min,max,guess){
-
-  let ans= await ask(`Is it higher (H), or lower (L)?`); 
-      if(ans==='H'&& max>min){
-      min=guess; 
-
-    } else if(ans==='L'&& max>min){
-      max=guess;}
-
-    else if(max<min){ console.log((`HOLD ON, YOU SAID ${guess} 
-    WAS LESS THAN ${max} AND GREATER THAN ${min}`)); isHighLow(min,max,guess)
-
-   }  else if (ans!=='H'||ans!=='L' || ans==undefined) isHighLow(min,max,guess);
-   guess=(( (max-min)/2 ))+min;
-   
-   return isItNum(min,max,guess);
-  } 
-
-
-   
-//secretnum=65
-//guess=max/2 ----guess=100/2
-//if high --> min=guess --------min= 50, max=100
-//if low--->max=guess --------min=0, max=50 ***false***
-//new guess---> max/2---------min=50, max=75
-
-//***math.floor! */
+       if(userGuess==lockSecret){
+       console.log(`You did it! the number was ${lockSecret}`);
+       process.exit; 
+       
+       /**How do I return everything to the top?
+         calling the guess function doesn't do it,
+         because guess IS UNDEFINED.  process.exit doesn't 
+         even work anymore :/
+         */
+     } 
+      else if (userGuess>lockSecret && userGuess<=max){
+       console.log('My number is lower than your guess')
+      }
+      else if (userGuess<lockSecret && userGuess<=max) {console.log('My number is higher than your guess')
+    }
+      else {
+        console.log('Please enter a whole number within range');
+     }
+    guessFunc(max, lockSecret);
+  }
