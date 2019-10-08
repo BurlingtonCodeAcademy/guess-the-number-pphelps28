@@ -11,9 +11,8 @@ function ask(questionText) {
 
 start();
 
-
 let min=0;
-let max= process.argv[2] ||100;
+let max= parseInt(process.argv[2]) ||100;
 async function start(){
 
   console.log(`\nPick a number between 1 and ${process.argv[2] ||100} and I'll try to guess it.\n`)
