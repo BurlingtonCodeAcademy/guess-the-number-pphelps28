@@ -1,5 +1,4 @@
 
-/* 10/7/19, FINE TUNE BEFORE CLASS.  THINK ABOUT WHY SINGLE DIGITS BEHAVE DIFFERENTLY*/
 
 const readline = require('readline');
 const rl = readline.createInterface(process.stdin, process.stdout);
@@ -20,9 +19,10 @@ async function start(){
   console.log(`\nPick a number between 1 and ${process.argv[2] ||100} and I'll try to guess it.\n`)
   let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
   console.log('You entered: ' + secretNumber + '\n');
-  
-  if(secretNumber>max || !parseInt(secretNumber) || secretNumber<1){
-      //^^ if the range is low, as in double digits, WHY DOES THE > or < reverse?
+  if( parseInt(secretNumber)>max){
+    console.log('************INVALID NUMBER******************');
+  }
+  if(!parseInt(secretNumber) || secretNumber<1 || secretNumber % 1 !==0){
     console.log('************INVALID NUMBER******************');
     start();;
   }
@@ -40,7 +40,7 @@ async function isItNum(min2,max2,guess){
     } else if (ans1.toUpperCase()==='Y'){ console.log(`\n********Your number is ${Math.ceil(guess)}!**********\n`);
       compguess();
 
-    } else console.log('***INVALID RESPONSE, (Y) or (N)***')//if (ans1.toUpperCase()!=='Y'||ans1.toUpperCase()!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
+    } else console.log('***INVALID RESPONSE, (Y) or (N)***')
     isItNum(min2,max2,guess);
 }
   
