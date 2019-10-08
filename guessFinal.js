@@ -1,3 +1,6 @@
+
+/* 10/7/19, FINE TUNE BEFORE CLASS.  THINK ABOUT WHY SINGLE DIGITS BEHAVE DIFFERENTLY*/
+
 const readline = require('readline');
 const rl = readline.createInterface(process.stdin, process.stdout);
 
@@ -9,16 +12,17 @@ function ask(questionText) {
 
 start();
 
-let max= process.argv[2] ||100;
-let min=0;
 
+let min=0;
+let max= process.argv[2] ||100;
 async function start(){
 
   console.log(`\nPick a number between 1 and ${process.argv[2] ||100} and I'll try to guess it.\n`)
   let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
   console.log('You entered: ' + secretNumber + '\n');
   
-  if(secretNumber>process.argv[2]){
+  if(secretNumber>max || !parseInt(secretNumber) || secretNumber<1){
+      //^^ if the range is low, as in double digits, WHY DOES THE > or < reverse?
     console.log('************INVALID NUMBER******************');
     start();;
   }
@@ -27,33 +31,33 @@ async function start(){
   isItNum(min, max, guess1);
 }
   
-async function isItNum(min,max,guess){   
-  let ans1 = await ask(`Is it...${Math.ceil(guess)}? (Y) or (N)`);
+async function isItNum(min2,max2,guess){   
+  let ans1 = await ask(`Is it...${Math.ceil(guess)}? (Y) or (N)\n`);
 
     if(ans1.toUpperCase()==='N'){
-    isHighLow(min, max, guess)  
+    isHighLow(min2, max2, guess)  
 
     } else if (ans1.toUpperCase()==='Y'){ console.log(`\n********Your number is ${Math.ceil(guess)}!**********\n`);
       compguess();
 
-    } else if (ans1.toUpperCase()!=='Y'||ans1.toUpperCase()!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
-    isItNUM(min,max,guess)};
+    } else console.log('***INVALID RESPONSE, (Y) or (N)***')//if (ans1.toUpperCase()!=='Y'||ans1.toUpperCase()!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
+    isItNum(min2,max2,guess);
 }
   
-async function isHighLow(min,max,guess){
-   let ans= await ask(`Is it higher (H), or lower (L)?`); 
+async function isHighLow(min3,max3,guess){
+   let ans= await ask(`Is it higher (H), or lower (L)?\n`); 
 
-      if(ans.toUpperCase()=== 'H' && max > min){
-        min=Math.floor(guess);
-      }else if(ans.toUpperCase()==='L'&& max>min){
-        max=Math.ceil(guess);
-      }else if(max < min){ 
+      if(ans.toUpperCase()=== 'H' && max3 >= min3){
+        min3=Math.ceil(guess);
+      }else if(ans.toUpperCase()==='L'&& max3 >=min3){
+        max3=Math.floor(guess);
+      }else if(max3 < min3){ 
         console.log((`HOLD ON, YOU SAID ${guess} 
-        WAS LESS THAN ${max} AND GREATER THAN ${min}`)); isHighLow(min,max,guess) 
-      }else if (ans!=='H'||ans!=='L' || ans==undefined) isHighLow(min,max,guess);
-     guess=(( (max-min)/2 ))+min;
+        WAS LESS THAN ${max3} AND GREATER THAN ${min3}`)); isHighLow(min3,max3,guess) 
+      }else if (ans!=='H'||ans!=='L' || ans==undefined) isHighLow(min3,max3,guess);
+     guess=(( (max3-min3)/2 ))+min3;
      
-  return isItNum(min,max,guess);
+  return isItNum(min3,max3,guess);
 } 
 
 async function compguess(){
@@ -63,7 +67,7 @@ async function compguess(){
   
   const secretNumber= Math.round(Math.random()*(max-min)+min);
   
-  console.log(secretNumber+'    ***THIS WILL BE HIDDEN***'); //so I know//
+  console.log(secretNumber+'    ***THIS WILL BE HIDDEN IN GAME***'); //so I know//
   guessFunc(max, secretNumber);
 }
 

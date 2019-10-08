@@ -36,8 +36,8 @@ async function isItNum(min,max,guess){
     } else if (ans1.toUpperCase()==='Y'){ console.log(`\n********Your number is ${Math.ceil(guess)}!**********\n`);
       compguess();
 
-    } else if (ans1.toUpperCase()!=='Y'||ans1.toUpperCase()!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
-    isItNUM(min,max,guess)};
+    } else console.log('***INVALID RESPONSE, (Y) or (N)***')//if (ans1.toUpperCase()!=='Y'||ans1.toUpperCase()!=='N') {console.log('INVALID RESPONSE, (Y) or (N)')
+    isItNum(min,max,guess);
 }
   
 async function isHighLow(min,max,guess){
